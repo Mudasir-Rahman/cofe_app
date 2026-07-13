@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 
 import '../domain/entity/user_entity.dart';
 
-class AuthState extends Equatable{
+ abstract class AuthState extends Equatable{
   const AuthState();
   @override
   List<Object> get props => [];
