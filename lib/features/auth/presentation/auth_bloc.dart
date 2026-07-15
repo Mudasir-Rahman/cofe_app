@@ -1,5 +1,8 @@
+
+import 'package:cofe_app/core/usecase/usecase.dart';
 import 'package:cofe_app/features/auth/presentation/auth_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:dartz/dartz.dart';
 
 
 import '../domain/auth_usecase/getcurrentuser_usecase.dart';
@@ -48,4 +51,30 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             (user) => emit(AuthAuthenticated(user: user)),
       );
     });
+
+    on<SignInEvent>((event , emit) async {
+      emit(const AuthLoading());
+      final result = await signInUseCase(
+
+        SignInParams(
+          email: event.email,
+          password: event.password,
+        ),
+      );
+       result.fold(
+           (failure)=> emit(AuthError(message: failure.message)),
+               (user)=> emit(AuthAuthenticated(user: user) )
+       );
+
+    });
+    on<SignOutEvent>((event, emit) async {
+      emit(const AuthLoading());
+      final result = await signOutUseCase(NoParams() as SignOutParams);
+      result.fold(
+            (failure) => emit(AuthError(message: failure.message)),
+            (user) => emit(AuthUnauthenticated()),
+
+      );
+      });
+
   }}
