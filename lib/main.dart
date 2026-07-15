@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'injection_container.dart' as di;
 
 Future<void> main() async {
   // 1. Initialize Flutter bindings (Required for async work before runApp)
@@ -15,7 +16,10 @@ Future<void> main() async {
     anonKey: dotenv.env['SUPABASE_ANON_KEY'] ?? '',
   );
 
-  // 4. Run the app
+  // 4. Initialize Dependency Injection
+  await di.init();
+
+  // 5. Run the app
   runApp(const MyApp());
 }
 
