@@ -20,6 +20,9 @@ Future<void> main() async {
   // Load .env
   await dotenv.load(fileName: ".env");
 
+  print("SUPABASE_URL = ${dotenv.env['SUPABASE_URL']}");
+  print("SUPABASE_KEY = ${dotenv.env['SUPABASE_ANON_KEY']?.substring(0, 20)}...");
+
   // Initialize Supabase
   await Supabase.initialize(
     url: dotenv.env['SUPABASE_URL'] ?? '',
