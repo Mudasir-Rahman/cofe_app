@@ -4,8 +4,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'core/config/app_routes.dart';
-import 'features/auth/presentation/auth_bloc.dart';
-import 'features/auth/presentation/auth_event.dart';
+
+import 'features/auth/presentation/auth_bloc/auth_bloc.dart';
+import 'features/auth/presentation/auth_bloc/auth_event.dart';
 import 'features/auth/presentation/auth_pages/home.dart';
 import 'features/auth/presentation/auth_pages/onboarding_page.dart';
 import 'features/auth/presentation/auth_pages/signIn.dart';

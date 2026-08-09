@@ -92,13 +92,15 @@
 //     });
 //   }}
 
-import 'package:cofe_app/features/auth/presentation/auth_event.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../domain/auth_usecase/getcurrentuser_usecase.dart';
-import '../domain/auth_usecase/signin_usecase.dart';
-import '../domain/auth_usecase/signout_usecase.dart';
-import '../domain/auth_usecase/singup_usecase.dart';
+
+import '../../domain/auth_usecase/getcurrentuser_usecase.dart';
+import '../../domain/auth_usecase/signin_usecase.dart';
+import '../../domain/auth_usecase/signout_usecase.dart';
+import '../../domain/auth_usecase/singup_usecase.dart';
+import 'auth_event.dart';
 import 'auth_state.dart';
 
 class NoParams {

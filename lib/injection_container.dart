@@ -8,7 +8,8 @@ import 'features/auth/domain/auth_usecase/signin_usecase.dart';
 import 'features/auth/domain/auth_usecase/signout_usecase.dart';
 import 'features/auth/domain/auth_usecase/singup_usecase.dart';
 import 'features/auth/domain/repository/auth_repository.dart';
-import 'features/auth/presentation/auth_bloc.dart';
+import 'features/auth/presentation/auth_bloc/auth_bloc.dart';
+
 
 final sl = GetIt.instance;
 
