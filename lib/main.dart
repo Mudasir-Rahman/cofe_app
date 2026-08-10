@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
           AppRoutes.splash: (context) => const SplashScreeen(),
           AppRoutes.onboarding: (context) => const OnboardingPage(),
           // AppRoutes.signIn: (context) => const SignInPage(),
-          // AppRoutes.signUp: (context) => const SignUpPage(),
+          AppRoutes.Signup: (context) => const Signup(),
           // AppRoutes.home: (context) => const HomePage(),
         },
       ),

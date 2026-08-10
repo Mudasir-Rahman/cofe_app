@@ -1,3 +1,4 @@
+import 'package:cofe_app/features/auth/presentation/auth_pages/signUp.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_images.dart';
@@ -88,7 +89,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   // Skip Button
                   TextButton(
                     onPressed: () {
-                      Navigator.pushReplacementNamed(context, '/signup');
+                      Navigator.pushReplacementNamed(context,  '/Signup');
                     },
                     child: const Text("Skip"),
                   ),
