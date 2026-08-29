@@ -1,10 +1,9 @@
 import 'package:cofe_app/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:dartz/dartz.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+
 
 import '../../../../core/ error/exceptions.dart';
 import '../../../../core/ error/failure.dart';
-
 import '../../domain/entity/user_entity.dart';
 import '../../domain/repository/auth_repository.dart';
 
@@ -27,8 +26,12 @@ class AuthRepositoryImpl implements AuthRepository {
       );
 
       return Right(user);
+    } on UnauthorizedException catch (e) {
+      return Left(UnauthorizedFailure(e.message));
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
+    } on DatabaseException catch (e) {
+      return Left(DatabaseFailure(e.message));
     } on CacheException catch (e) {
       return Left(CacheFailure(e.message));
     } on BadRequestException catch (e) {
@@ -56,8 +59,12 @@ class AuthRepositoryImpl implements AuthRepository {
       );
 
       return Right(user);
+    } on UnauthorizedException catch (e) {
+      return Left(UnauthorizedFailure(e.message));
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
+    } on DatabaseException catch (e) {
+      return Left(DatabaseFailure(e.message));
     } on CacheException catch (e) {
       return Left(CacheFailure(e.message));
     } on BadRequestException catch (e) {
@@ -79,8 +86,10 @@ class AuthRepositoryImpl implements AuthRepository {
       await authRemoteDataSource.signOut();
 
       return const Right(null);
-    } on AuthException catch (e) {
+    } on UnauthorizedException catch (e) {
       return Left(UnauthorizedFailure(e.message));
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
     } catch (e) {
       return Left(UnknownFailure(e.toString()));
     }
@@ -92,10 +101,12 @@ class AuthRepositoryImpl implements AuthRepository {
       final user = await authRemoteDataSource.getCurrentUser();
 
       return Right(user);
-    } on PostgrestException catch (e) {
-      return Left(DatabaseFailure(e.message));
-    } on AuthException catch (e) {
+    } on UnauthorizedException catch (e) {
       return Left(UnauthorizedFailure(e.message));
+    } on DatabaseException catch (e) {
+      return Left(DatabaseFailure(e.message));
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
     } catch (e) {
       return Left(UnknownFailure(e.toString()));
     }

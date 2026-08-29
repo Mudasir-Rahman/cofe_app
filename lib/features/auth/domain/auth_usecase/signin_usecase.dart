@@ -5,16 +5,22 @@ import 'package:dartz/dartz.dart';
 
 import '../../../../core/ error/failure.dart';
 
-class SignInUseCase extends UseCase<UserEntity, SignInParams>{
-  AuthRepository authRepository;
+class SignInUseCase extends UseCase<UserEntity, SignInParams> {
+  final AuthRepository authRepository;
+
   SignInUseCase(this.authRepository);
-@override
-  Future<Either<Failure, UserEntity>> call(SignInParams params) {
-return  authRepository.signIn(
-    email: params.email,
-    password: params.password);
+
+  @override
+  Future<Either<Failure, UserEntity>> call(
+      SignInParams params,
+      ) {
+    return authRepository.signIn(
+      email: params.email,
+      password: params.password,
+    );
+  }
 }
-}
+
 class SignInParams {
   final String email;
   final String password;
