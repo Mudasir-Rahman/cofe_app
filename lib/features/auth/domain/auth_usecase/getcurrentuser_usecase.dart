@@ -1,18 +1,26 @@
 import 'package:cofe_app/core/usecase/usecase.dart';
 import 'package:cofe_app/features/auth/domain/entity/user_entity.dart';
+import 'package:cofe_app/features/auth/domain/repository/auth_repository.dart';
 import 'package:dartz/dartz.dart';
 
 import '../../../../core/ error/failure.dart';
-import '../repository/auth_repository.dart';
 
-class GetCurrentUserUseCase extends UseCase<UserEntity? , getCurrentUserParams>{
-  AuthRepository authRepository;
+
+
+class GetCurrentUserUseCase
+    extends UseCase<UserEntity, GetCurrentUserParams> {
+  final AuthRepository authRepository;
+
   GetCurrentUserUseCase(this.authRepository);
+
   @override
-  Future<Either<Failure, UserEntity?>> call(getCurrentUserParams params) {
-    return  authRepository.getCurrentUser();
+  Future<Either<Failure, UserEntity>> call(
+      GetCurrentUserParams params,
+      ) {
+    return authRepository.getCurrentUser();
   }
 }
-class getCurrentUserParams {
-  const getCurrentUserParams();
+
+class GetCurrentUserParams {
+  const GetCurrentUserParams();
 }
