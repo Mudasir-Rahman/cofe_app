@@ -27,7 +27,7 @@ Future<void> init() async {
   );
 
   // Use cases
-  sl.registerLazySingleton(() => SingUpUseCase(sl()));
+  sl.registerLazySingleton(() => SignUpUseCase(sl()));
   sl.registerLazySingleton(() => SignInUseCase(sl()));
   sl.registerLazySingleton(() => SignOutUseCase(sl()));
   sl.registerLazySingleton(() => GetCurrentUserUseCase(sl()));
