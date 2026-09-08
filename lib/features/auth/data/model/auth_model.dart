@@ -6,6 +6,7 @@ class UserModel extends UserEntity {
     required super.name,
     required super.email,
     super.photoUrl,
+    super.phoneNumber,
     required super.createdAt,
   });
 
@@ -14,17 +15,16 @@ class UserModel extends UserEntity {
   /// Email is NOT stored in profiles.
   /// It comes separately from Supabase Auth.
   factory UserModel.fromJson(
-      Map<String, dynamic> json, {
-        required String email,
-      }) {
+    Map<String, dynamic> json, {
+    required String email,
+  }) {
     return UserModel(
       id: json['id'] as String,
       name: json['name'] as String,
       email: email,
       photoUrl: json['photo_url'] as String?,
-      createdAt: DateTime.parse(
-        json['created_at'] as String,
-      ),
+      phoneNumber: json['phone_number'] as String?,
+      createdAt: DateTime.parse(json['created_at'] as String),
     );
   }
 
@@ -37,6 +37,7 @@ class UserModel extends UserEntity {
       'id': id,
       'name': name,
       'photo_url': photoUrl,
+      'phone_number': phoneNumber,
       'created_at': createdAt.toIso8601String(),
     };
   }
@@ -46,6 +47,7 @@ class UserModel extends UserEntity {
     String? name,
     String? email,
     String? photoUrl,
+    String? phoneNumber,
     DateTime? createdAt,
   }) {
     return UserModel(
@@ -53,6 +55,7 @@ class UserModel extends UserEntity {
       name: name ?? this.name,
       email: email ?? this.email,
       photoUrl: photoUrl ?? this.photoUrl,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
       createdAt: createdAt ?? this.createdAt,
     );
   }

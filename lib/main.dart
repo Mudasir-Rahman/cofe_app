@@ -7,7 +7,7 @@ import 'core/config/app_routes.dart';
 
 import 'features/auth/presentation/auth_bloc/auth_bloc.dart';
 import 'features/auth/presentation/auth_bloc/auth_event.dart';
-import 'features/auth/presentation/auth_pages/home.dart';
+import 'features/auth/presentation/home_screen/home.dart';
 import 'features/auth/presentation/auth_pages/onboarding_page.dart';
 import 'features/auth/presentation/auth_pages/signIn.dart';
 import 'features/auth/presentation/auth_pages/signUp.dart';

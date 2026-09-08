@@ -3,6 +3,7 @@ class UserEntity {
   final String name;
   final String email;
   final String? photoUrl;
+  final String? phoneNumber;
   final DateTime createdAt;
 
   const UserEntity({
@@ -10,6 +11,7 @@ class UserEntity {
     required this.name,
     required this.email,
     this.photoUrl,
+    this.phoneNumber,
     required this.createdAt,
   });
 }
