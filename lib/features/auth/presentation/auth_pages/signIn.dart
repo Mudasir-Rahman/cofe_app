@@ -246,7 +246,7 @@ class _SigninState extends State<Signin> {
                           onPressed: () {
                             Navigator.pushReplacementNamed(
                               context,
-                              '/signup',
+                              '/signUp',
                             );
                           },
                           child: Text(
