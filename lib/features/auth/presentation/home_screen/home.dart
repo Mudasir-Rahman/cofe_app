@@ -20,9 +20,7 @@ class HomeScreen extends StatelessWidget {
         foregroundColor: Colors.white,
         title: const Text(
           'Coffee App',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [
           IconButton(
@@ -44,9 +42,8 @@ class HomeScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   Text(
-                    'Hello, ${user.name} 👋',
+                    'Hello, ${user.email} 👋',
                     style: const TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
@@ -58,10 +55,7 @@ class HomeScreen extends StatelessWidget {
 
                   const Text(
                     'What would you like to drink today?',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black54,
-                    ),
+                    style: TextStyle(fontSize: 16, color: Colors.black54),
                   ),
 
                   const SizedBox(height: 30),
@@ -89,10 +83,7 @@ class HomeScreen extends StatelessWidget {
 
                         Text(
                           'Discover your favorite coffee and enjoy every sip.',
-                          style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 15,
-                          ),
+                          style: TextStyle(color: Colors.white70, fontSize: 15),
                         ),
                       ],
                     ),
@@ -113,21 +104,11 @@ class HomeScreen extends StatelessWidget {
 
                   Row(
                     children: [
-                      Expanded(
-                        child: _coffeeCard(
-                          'Cappuccino',
-                          Icons.coffee,
-                        ),
-                      ),
+                      Expanded(child: _coffeeCard('Cappuccino', Icons.coffee)),
 
                       const SizedBox(width: 15),
 
-                      Expanded(
-                        child: _coffeeCard(
-                          'Latte',
-                          Icons.local_cafe,
-                        ),
-                      ),
+                      Expanded(child: _coffeeCard('Latte', Icons.local_cafe)),
                     ],
                   ),
 
@@ -145,14 +126,9 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        context.read<AuthBloc>().add(
-                          const SignOutEvent(),
-                        );
+                        context.read<AuthBloc>().add(const SignOutEvent());
 
-                        Navigator.pushReplacementNamed(
-                          context,
-                          '/signIn',
-                        );
+                        Navigator.pushReplacementNamed(context, '/signIn');
                       },
                       icon: const Icon(Icons.logout),
                       label: const Text(
@@ -170,16 +146,11 @@ class HomeScreen extends StatelessWidget {
           }
 
           if (state is AuthLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
           }
 
           return const Center(
-            child: Text(
-              'No user found.',
-              style: TextStyle(fontSize: 18),
-            ),
+            child: Text('No user found.', style: TextStyle(fontSize: 18)),
           );
         },
       ),
@@ -192,21 +163,12 @@ class HomeScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
-        boxShadow: const [
-          BoxShadow(
-            blurRadius: 6,
-            color: Colors.black12,
-          ),
-        ],
+        boxShadow: const [BoxShadow(blurRadius: 6, color: Colors.black12)],
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            icon,
-            size: 50,
-            color: coffeeBrown,
-          ),
+          Icon(icon, size: 50, color: coffeeBrown),
 
           const SizedBox(height: 10),
 

@@ -4,8 +4,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../core/ error/exceptions.dart';
 
-
-
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final SupabaseClient supabase;
 
@@ -21,29 +19,19 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       final response = await supabase.auth.signUp(
         email: email,
         password: password,
-        data: {
-          'name': name,
-        },
+        data: {'name': name},
       );
 
       final user = response.user;
 
       if (user == null) {
-        throw const ServerException(
-          'User registration failed.',
-        );
+        throw const ServerException('User registration failed.');
       }
 
       // The profiles row is created automatically
       // by the Supabase database trigger.
 
-      return UserModel(
-        id: user.id,
-        name: name,
-        email: user.email ?? email,
-        photoUrl: null,
-        createdAt: DateTime.now(),
-      );
+      return UserModel.fromSupabaseUser(user.id, user.email ?? email);
     } on AuthException catch (e) {
       throw UnauthorizedException(e.message);
     } on PostgrestException catch (e) {
@@ -69,21 +57,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       final user = response.user;
 
       if (user == null) {
-        throw const UnauthorizedException(
-          'Invalid email or password.',
-        );
+        throw const UnauthorizedException('Invalid email or password.');
       }
 
-      final profile = await supabase
-          .from('profiles')
-          .select()
-          .eq('id', user.id)
-          .single();
-
-      return UserModel.fromJson(
-        profile,
-        email: user.email ?? email,
-      );
+      return UserModel.fromSupabaseUser(user.id, user.email ?? email);
     } on AuthException catch (e) {
       throw UnauthorizedException(e.message);
     } on PostgrestException catch (e) {
@@ -112,21 +89,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       final user = supabase.auth.currentUser;
 
       if (user == null) {
-        throw const UnauthorizedException(
-          'No authenticated user.',
-        );
+        throw const UnauthorizedException('No authenticated user.');
       }
 
-      final profile = await supabase
-          .from('profiles')
-          .select()
-          .eq('id', user.id)
-          .single();
-
-      return UserModel.fromJson(
-        profile,
-        email: user.email ?? '',
-      );
+      return UserModel.fromSupabaseUser(user.id, user.email);
     } on AuthException catch (e) {
       throw UnauthorizedException(e.message);
     } on PostgrestException catch (e) {

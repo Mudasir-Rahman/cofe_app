@@ -1,7 +1,4 @@
-
-
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 
 import '../../domain/auth_usecase/getcurrentuser_usecase.dart';
 import '../../domain/auth_usecase/signin_usecase.dart';
@@ -21,11 +18,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final GetCurrentUserUseCase getCurrentUserUseCase;
 
   AuthBloc(
-      this.singUpUseCase,
-      this.signInUseCase,
-      this.signOutUseCase,
-      this.getCurrentUserUseCase,
-      ) : super(AuthInitial()) {
+    this.singUpUseCase,
+    this.signInUseCase,
+    this.signOutUseCase,
+    this.getCurrentUserUseCase,
+  ) : super(AuthInitial()) {
     on<SignUpEvent>(_onSignUp);
     on<SignInEvent>(_onSignIn);
     on<SignOutEvent>(_onSignOut);
@@ -35,29 +32,26 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future<void> _onSignUp(SignUpEvent event, Emitter<AuthState> emit) async {
     emit(const AuthLoading());
     final result = await singUpUseCase(
-      SignUpParams (
+      SignUpParams(
         name: event.name,
         email: event.email,
         password: event.password,
       ),
     );
     result.fold(
-          (failure) => emit(AuthError(message: failure.message)),
-          (user) => emit(AuthAuthenticated(user: user)),
+      (failure) => emit(AuthError(message: failure.message)),
+      (user) => emit(AuthAuthenticated(user: user)),
     );
   }
 
   Future<void> _onSignIn(SignInEvent event, Emitter<AuthState> emit) async {
     emit(const AuthLoading());
     final result = await signInUseCase(
-      SignInParams(
-        email: event.email,
-        password: event.password,
-      ),
+      SignInParams(email: event.email, password: event.password),
     );
     result.fold(
-          (failure) => emit(AuthError(message: failure.message)),
-          (user) => emit(AuthAuthenticated(user: user)),
+      (failure) => emit(AuthError(message: failure.message)),
+      (user) => emit(AuthAuthenticated(user: user)),
     );
   }
 
@@ -65,19 +59,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(const AuthLoading());
     final result = await signOutUseCase(SignOutParams());
     result.fold(
-          (failure) => emit(AuthError(message: failure.message)),
-          (_) => emit(AuthUnauthenticated()),
+      (failure) => emit(AuthError(message: failure.message)),
+      (_) => emit(AuthUnauthenticated()),
     );
   }
 
-  Future<void> _onGetCurrentUser(GetCurrentUserEvent event, Emitter<AuthState> emit) async {
+  Future<void> _onGetCurrentUser(
+    GetCurrentUserEvent event,
+    Emitter<AuthState> emit,
+  ) async {
     emit(const AuthLoading());
     final result = await getCurrentUserUseCase(GetCurrentUserParams());
     result.fold(
-          (failure) => emit(AuthError(message: failure.message)),
-          (user) => user != null
-          ? emit(AuthAuthenticated(user: user))
-          : emit(AuthUnauthenticated()),
+      (failure) => emit(AuthError(message: failure.message)),
+      (user) => emit(AuthAuthenticated(user: user)),
     );
   }
 }
