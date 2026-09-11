@@ -1,6 +1,6 @@
-
-
 import 'package:flutter/material.dart';
+
+import '../../../../core/config/app_routes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SplashScreeen extends StatefulWidget {
@@ -28,10 +28,10 @@ class _SplashScreeenState extends State<SplashScreeen> {
 
     if (user != null) {
       // User is already logged in
-      Navigator.pushReplacementNamed(context, '/home');
+      Navigator.pushReplacementNamed(context, AppRoutes.home);
     } else {
       // User is not logged in
-      Navigator.pushReplacementNamed(context, '/onboarding');
+      Navigator.pushReplacementNamed(context, AppRoutes.onboarding);
     }
   }
 

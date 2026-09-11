@@ -1,9 +1,9 @@
-
 import 'package:cofe_app/core/constants/app_images.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/config/app_routes.dart';
 import '../auth_bloc/auth_bloc.dart';
 import '../auth_bloc/auth_event.dart';
 import '../auth_bloc/auth_state.dart';
@@ -44,20 +44,13 @@ class _SigninState extends State<Signin> {
       return;
     }
 
-    context.read<AuthBloc>().add(
-      SignInEvent(
-        email: email,
-        password: password,
-      ),
-    );
+    context.read<AuthBloc>().add(SignInEvent(email: email, password: password));
   }
 
   void _showMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
@@ -67,10 +60,7 @@ class _SigninState extends State<Signin> {
         if (state is AuthAuthenticated) {
           _showMessage('Login successful!');
 
-          Navigator.pushReplacementNamed(
-            context,
-            '/home',
-          );
+          Navigator.pushReplacementNamed(context, AppRoutes.home);
         }
 
         if (state is AuthError) {
@@ -211,20 +201,20 @@ class _SigninState extends State<Signin> {
                             onPressed: isLoading ? null : _signIn,
                             child: isLoading
                                 ? const SizedBox(
-                              height: 24,
-                              width: 24,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: Colors.white,
-                              ),
-                            )
+                                    height: 24,
+                                    width: 24,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: Colors.white,
+                                    ),
+                                  )
                                 : const Text(
-                              'Sign In',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                                    'Sign In',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                           ),
                         );
                       },
@@ -237,16 +227,13 @@ class _SigninState extends State<Signin> {
                       children: [
                         const Text(
                           "Don't have an account?",
-                          style: TextStyle(
-                            color: Colors.black54,
-                            fontSize: 15,
-                          ),
+                          style: TextStyle(color: Colors.black54, fontSize: 15),
                         ),
                         TextButton(
                           onPressed: () {
                             Navigator.pushReplacementNamed(
                               context,
-                              '/signUp',
+                              AppRoutes.signUp,
                             );
                           },
                           child: Text(

@@ -12,6 +12,7 @@ import 'features/auth/presentation/auth_pages/onboarding_page.dart';
 import 'features/auth/presentation/auth_pages/signIn.dart';
 import 'features/auth/presentation/auth_pages/signUp.dart';
 import 'features/auth/presentation/auth_pages/splash_screen.dart';
+import 'features/auth/presentation/home_screen/profile_page.dart';
 
 import 'injection_container.dart' as di;
 
@@ -22,7 +23,9 @@ Future<void> main() async {
   await dotenv.load(fileName: ".env");
 
   print("SUPABASE_URL = ${dotenv.env['SUPABASE_URL']}");
-  print("SUPABASE_KEY = ${dotenv.env['SUPABASE_ANON_KEY']?.substring(0, 20)}...");
+  print(
+    "SUPABASE_KEY = ${dotenv.env['SUPABASE_ANON_KEY']?.substring(0, 20)}...",
+  );
 
   // Initialize Supabase
   await Supabase.initialize(
@@ -56,8 +59,9 @@ class MyApp extends StatelessWidget {
           AppRoutes.splash: (context) => const SplashScreeen(),
           AppRoutes.onboarding: (context) => const OnboardingPage(),
           AppRoutes.signIn: (context) => const Signin(),
-          AppRoutes.Signup: (context) => const Signup(),
-           AppRoutes.home: (context) => const HomeScreen(),
+          AppRoutes.signUp: (context) => const Signup(),
+          AppRoutes.home: (context) => const HomeScreen(),
+          AppRoutes.profile: (context) => const ProfilePage(),
         },
       ),
     );

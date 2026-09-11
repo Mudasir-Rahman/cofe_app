@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/config/app_routes.dart';
 import '../auth_bloc/auth_bloc.dart';
 import '../auth_bloc/auth_event.dart';
 import '../auth_bloc/auth_state.dart';
@@ -26,7 +27,7 @@ class HomeScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.person),
             onPressed: () {
-              Navigator.pushNamed(context, '/profile');
+              Navigator.pushNamed(context, AppRoutes.profile);
             },
           ),
         ],
@@ -128,7 +129,10 @@ class HomeScreen extends StatelessWidget {
                       onPressed: () {
                         context.read<AuthBloc>().add(const SignOutEvent());
 
-                        Navigator.pushReplacementNamed(context, '/signIn');
+                        Navigator.pushReplacementNamed(
+                          context,
+                          AppRoutes.signIn,
+                        );
                       },
                       icon: const Icon(Icons.logout),
                       label: const Text(

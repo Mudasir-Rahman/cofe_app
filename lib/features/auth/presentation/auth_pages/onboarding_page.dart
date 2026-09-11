@@ -1,7 +1,7 @@
-import 'package:cofe_app/features/auth/presentation/auth_pages/signUp.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_images.dart';
+import '../../../../core/config/app_routes.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
@@ -19,20 +19,17 @@ class _OnboardingPageState extends State<OnboardingPage> {
     {
       'image': AppImages.onboarding1,
       'title': 'Discover Your Perfect Coffee',
-      'subtitle':
-      'Explore premium coffee crafted for every coffee lover.',
+      'subtitle': 'Explore premium coffee crafted for every coffee lover.',
     },
     {
       'image': AppImages.onboarding2,
       'title': 'Fresh Coffee Delivered',
-      'subtitle':
-      'Enjoy fast delivery and fresh coffee anytime.',
+      'subtitle': 'Enjoy fast delivery and fresh coffee anytime.',
     },
     {
       'image': AppImages.onboarding3,
       'title': 'Enjoy Every Sip',
-      'subtitle':
-      'Start your coffee journey with just one tap.',
+      'subtitle': 'Start your coffee journey with just one tap.',
     },
   ];
 
@@ -43,8 +40,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
         curve: Curves.easeInOut,
       );
     } else {
-      Navigator.pushReplacementNamed(context, '/signup');
-      // Replace '/signup' with your actual route if different.
+      Navigator.pushReplacementNamed(context, AppRoutes.signUp);
     }
   }
 
@@ -79,17 +75,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
             ),
 
             Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 20,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   // Skip Button
                   TextButton(
                     onPressed: () {
-                      Navigator.pushReplacementNamed(context,  '/Signup');
+                      Navigator.pushReplacementNamed(context, AppRoutes.signUp);
                     },
                     child: const Text("Skip"),
                   ),
@@ -98,7 +91,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   Row(
                     children: List.generate(
                       onboardingData.length,
-                          (index) => AnimatedContainer(
+                      (index) => AnimatedContainer(
                         duration: const Duration(milliseconds: 300),
                         margin: const EdgeInsets.symmetric(horizontal: 4),
                         width: _currentPage == index ? 20 : 8,
