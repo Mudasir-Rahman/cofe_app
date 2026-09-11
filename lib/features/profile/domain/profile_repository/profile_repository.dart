@@ -5,9 +5,9 @@ import 'package:dartz/dartz.dart';
 abstract class ProfileRepository {
   Future<Either <Failure, ProfileEntity>>createProfile ({
 
-required id ,
+
   required fullName ,
-    required phoneMumber,
+    required phoneNumber,
   required avatarUrl,
 
 
