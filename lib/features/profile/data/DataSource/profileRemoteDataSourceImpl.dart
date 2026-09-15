@@ -7,7 +7,11 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource{
   ProfileRemoteDataSourceImpl(this.supabase);
 
   @override
-  Future<ProfileModel> createProfile({required fullName, required phoneNumber, required avatarUrl}) {
+  Future<ProfileModel> createProfile({
+    required fullName,
+    required phoneNumber,
+    required avatarUrl
+  }) {
     // TODO: implement createProfile
     throw UnimplementedError();
   }
