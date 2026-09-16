@@ -88,6 +88,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       final user = supabase.auth.currentUser;
 
+
       if (user == null) {
         throw const UnauthorizedException('No authenticated user.');
       }
