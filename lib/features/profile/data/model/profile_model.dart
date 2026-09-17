@@ -13,10 +13,12 @@ class ProfileModel extends ProfileEntity {
   factory ProfileModel.fromJson(Map<String, dynamic> json) {
     return ProfileModel(
       id: json['id'] as String,
-      fullName: (json['full_name'] ?? json['name']) as String,
+      fullName: (json['full_name'] ?? json['name'] ?? '') as String,
       phoneNumber: json['phone_number'] as String?,
       avatarUrl: (json['avatar_url'] ?? json['photo_url']) as String?,
-      createdAt: DateTime.parse(json['created_at'] as String),
+      createdAt: json['created_at'] != null 
+          ? DateTime.parse(json['created_at'] as String)
+          : DateTime.now(),
       updatedAt: json['updated_at'] == null
           ? null
           : DateTime.parse(json['updated_at'] as String),
@@ -26,11 +28,12 @@ class ProfileModel extends ProfileEntity {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'name': fullName,
+      'full_name': fullName,
       'phone_number': phoneNumber,
-      'photo_url': avatarUrl,
+      'avatar_url': avatarUrl,
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt?.toIso8601String(),
     };
   }
+
 }

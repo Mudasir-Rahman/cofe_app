@@ -7,16 +7,13 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/ error/failure.dart';
 
 class GetProfileUsecase
-    extends UseCase< ProfileEntity, NoParams> {
+    extends UseCase<ProfileEntity, NoParams> {
   final ProfileRepository profileRepository;
 
   GetProfileUsecase(this.profileRepository);
 
   @override
-  Future<Either<Failure, ProfileEntity>> call (NoParams params) {
+  Future<Either<Failure, ProfileEntity>> call(NoParams params) {
     return profileRepository.getProfile();
   }
-}
-class NoParams{
-  NoParams();
 }

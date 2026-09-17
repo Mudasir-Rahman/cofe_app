@@ -1,6 +1,7 @@
 import 'package:cofe_app/features/profile/data/DataSource/profileRemoteDataSource.dart';
 import 'package:cofe_app/features/profile/data/model/profile_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../../../core/ error/exceptions.dart';
 
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   final SupabaseClient supabase;
@@ -8,14 +9,14 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
 
   @override
   Future<ProfileModel> createProfile({
-    required fullName,
-    required phoneNumber,
-    required avatarUrl,
+    required String fullName,
+    String? phoneNumber,
+    String? avatarUrl,
   }) async {
     try {
       final user = supabase.auth.currentUser;
       if (user == null) {
-        throw Exception('user not login');
+        throw const UnauthorizedException('User not logged in');
       }
       final response = await supabase
           .from('profile')
@@ -28,72 +29,94 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
           .select()
           .single();
       return ProfileModel.fromJson(response);
+    } on PostgrestException catch (e) {
+      throw ServerException(e.message);
     } catch (e) {
-      throw Exception('Field to create profile $e');
+      if (e is AppException) rethrow;
+      throw UnknownException(e.toString());
     }
   }
 
   @override
   Future<ProfileModel> deleteProfile() async {
-    try{
-      final user = await supabase.auth.currentUser;
-      if(user==null){
-        throw Exception('User is no login');
+    try {
+      final user = supabase.auth.currentUser;
+      if (user == null) {
+        throw const UnauthorizedException('User not logged in');
       }
-      final response =await supabase
-      .from('profile')
-      .delete()
-      .eq('id', user.id)
-      .select()
-      .single();
+      final response = await supabase
+          .from('profile')
+          .delete()
+          .eq('id', user.id)
+          .select()
+          .single();
       return ProfileModel.fromJson(response);
-    }catch (e){
-    throw Exception('Field to delete profile $e');
-  }}
+    } on PostgrestException catch (e) {
+      throw ServerException(e.message);
+    } catch (e) {
+      if (e is AppException) rethrow;
+      throw UnknownException(e.toString());
+    }
+  }
 
   @override
   Future<ProfileModel> getProfile() async {
-    try{
-      final user = await supabase.auth.currentUser;
-      if(user==null){
-        throw Exception('User is not Login ');
+    try {
+      final user = supabase.auth.currentUser;
+      if (user == null) {
+        throw const UnauthorizedException('User not logged in');
       }
-      final response= await supabase
-      .from('profile')
-      .select()
-      .eq('id', user.id)
-      .select()
-      .single();
+      final response = await supabase
+          .from('profile')
+          .select()
+          .eq('id', user.id)
+          .single();
       return ProfileModel.fromJson(response);
-    }catch (e){
-
-
-    throw Exception('Field to get the user data $e');
-  }}
+    } on PostgrestException catch (e) {
+      if (e.code == 'PGRST116') {
+        throw const NotFoundException('Profile not found');
+      }
+      throw ServerException(e.message);
+    } catch (e) {
+      if (e is AppException) rethrow;
+      throw UnknownException(e.toString());
+    }
+  }
 
   @override
   Future<ProfileModel> updateProfile({
-    required fullName,
-    required phoneNumber,
-    required avatarUrl,
-  })async {
-    try{
-      final user = await supabase.auth.currentUser;
-      if(user==null){
-        throw Exception( 'User is not login ');
+    String? fullName,
+    String? phoneNumber,
+    String? avatarUrl,
+  }) async {
+    try {
+      final user = supabase.auth.currentUser;
+      if (user == null) {
+        throw const UnauthorizedException('User not logged in');
       }
-      final response= await supabase
-      .from('profile')
-      .update({
-        'full_name': fullName,
-        'phone_number': phoneNumber,
-        'avatar_url': avatarUrl,
-      })
-      .eq('id', user.id)
-      .select()
-      .single();
-return ProfileModel.fromJson(response);
-    }catch (e) {
-      throw Exception('field to update the profile ');
-    }}
+
+      final Map<String, dynamic> updateData = {};
+      if (fullName != null) updateData['full_name'] = fullName;
+      if (phoneNumber != null) updateData['phone_number'] = phoneNumber;
+      if (avatarUrl != null) updateData['avatar_url'] = avatarUrl;
+
+      if (updateData.isEmpty) {
+        return getProfile();
+      }
+
+      final response = await supabase
+          .from('profile')
+          .update(updateData)
+          .eq('id', user.id)
+          .select()
+          .single();
+      return ProfileModel.fromJson(response);
+    } on PostgrestException catch (e) {
+      throw ServerException(e.message);
+    } catch (e) {
+      if (e is AppException) rethrow;
+      throw UnknownException(e.toString());
+    }
+  }
 }
+
