@@ -1,53 +1,46 @@
+import 'package:cofe_app/core/%20error/exceptions.dart';
 import 'package:cofe_app/core/%20error/failure.dart';
-import 'package:cofe_app/features/profile/data/DataSource/profileRemoteDataSourceImpl.dart';
-import 'package:cofe_app/features/profile/data/model/profile_model.dart';
+import 'package:cofe_app/features/profile/data/DataSource/profileRemoteDataSource.dart';
 import 'package:cofe_app/features/profile/domain/entity/profile_entity.dart';
+import 'package:cofe_app/features/profile/domain/profile_repository/profile_repository.dart';
 import 'package:dartz/dartz.dart';
-import 'package:supabase/src/supabase_client.dart';
 
-import '../DataSource/profileRemoteDataSource.dart';
-
-class ProfileRepositoryImpl implements ProfileRemoteDataSource{
+class ProfileRepositoryImpl implements ProfileRepository{
   ProfileRemoteDataSource profileRemoteDataSource;
   ProfileRepositoryImpl(this.profileRemoteDataSource);
 
   @override
-  Future<Either<Failure,ProfileEntity>> createProfile({
+  Future<Either<Failure, ProfileEntity>> createProfile({
     required fullName,
     required phoneNumber,
     required avatarUrl
-
   }) async {
-    try{
-      final user=await profileRemoteDataSource.createProfile(
+    try {
+      final user = await profileRemoteDataSource.createProfile(
           fullName: fullName,
           phoneNumber: phoneNumber,
           avatarUrl: avatarUrl
       );
-
+      return Right(user);
+    } on
+    UnauthorizedFailure catch (e) {
+      throw left(UnauthorizedException(e.message));
     }
-    // TODO: implement createProfile
-    throw UnimplementedError();
   }
-
   @override
-  Future<ProfileModel> deleteProfile() {
+  Future<Either<Failure, ProfileEntity>> deleteProfile() {
     // TODO: implement deleteProfile
     throw UnimplementedError();
   }
 
   @override
-  Future<ProfileModel> getProfile() {
+  Future<Either<Failure, ProfileEntity>> getProfile() {
     // TODO: implement getProfile
     throw UnimplementedError();
   }
 
   @override
-  // TODO: implement supabase
-  SupabaseClient get supabase => throw UnimplementedError();
-
-  @override
-  Future<ProfileModel> updateProfile({required fullName, required phoneNumber, required avatarUrl}) {
+  Future<Either<Failure, ProfileEntity>> updateProfile({required fullName, required avatarUrl, required phoneNumber}) {
     // TODO: implement updateProfile
     throw UnimplementedError();
   }
