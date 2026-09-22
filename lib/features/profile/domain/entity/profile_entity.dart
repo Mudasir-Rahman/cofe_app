@@ -11,4 +11,3 @@ class ProfileEntity {
     this.avatarUrl,
   });
 }
-
