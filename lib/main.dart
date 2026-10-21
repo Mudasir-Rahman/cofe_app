@@ -12,7 +12,9 @@ import 'features/auth/presentation/auth_pages/onboarding_page.dart';
 import 'features/auth/presentation/auth_pages/signIn.dart';
 import 'features/auth/presentation/auth_pages/signUp.dart';
 import 'features/auth/presentation/auth_pages/splash_screen.dart';
-import 'features/auth/presentation/home_screen/profile_page.dart';
+import 'features/profile/presentation/profile_screen/profile_page.dart';
+import 'features/profile/presentation/bloc/profile_bloc.dart';
+import 'features/profile/presentation/bloc/profile_event.dart';
 
 import 'injection_container.dart' as di;
 
@@ -61,7 +63,10 @@ class MyApp extends StatelessWidget {
           AppRoutes.signIn: (context) => const Signin(),
           AppRoutes.signUp: (context) => const Signup(),
           AppRoutes.home: (context) => const HomeScreen(),
-          AppRoutes.profile: (context) => const ProfilePage(),
+          AppRoutes.profile: (context) => BlocProvider(
+            create: (_) => di.sl<ProfileBloc>()..add(const GetProfileEvent()),
+            child: const ProfilePage(),
+          ),
         },
       ),
     );

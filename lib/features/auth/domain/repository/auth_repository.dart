@@ -6,7 +6,6 @@ import '../entity/user_entity.dart';
 
 abstract class AuthRepository {
   Future<Either<Failure, UserEntity>> signUp({
-    required String name,
     required String email,
     required String password,
   });

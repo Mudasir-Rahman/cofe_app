@@ -17,7 +17,6 @@ class SignUpUseCase extends UseCase<UserEntity, SignUpParams> {
       SignUpParams params,
       ) {
     return authRepository.signUp(
-      name: params.name,
       email: params.email,
       password: params.password,
     );
@@ -25,12 +24,10 @@ class SignUpUseCase extends UseCase<UserEntity, SignUpParams> {
 }
 
 class SignUpParams {
-  final String name;
   final String email;
   final String password;
 
   const SignUpParams({
-    required this.name,
     required this.email,
     required this.password,
   });

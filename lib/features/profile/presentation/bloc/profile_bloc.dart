@@ -1,4 +1,5 @@
 import 'package:cofe_app/core/usecase/usecase.dart';
+import 'package:cofe_app/core/%20error/failure.dart';
 import 'package:cofe_app/features/profile/domain/profile_usecase/createProfile_usecase.dart';
 import 'package:cofe_app/features/profile/domain/profile_usecase/deleteProfile_usecase.dart';
 import 'package:cofe_app/features/profile/domain/profile_usecase/getProfile_usecase.dart';
@@ -78,7 +79,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     emit(const ProfileLoading());
     final result = await getProfileUseCase(NoParams());
     result.fold(
-      (failure) => emit(ProfileError(message: failure.message)),
+      (failure) => emit(
+        failure is NotFoundFailure
+            ? const ProfileNotFound()
+            : ProfileError(message: failure.message),
+      ),
       (profile) => emit(ProfileLoaded(profile: profile)),
     );
   }

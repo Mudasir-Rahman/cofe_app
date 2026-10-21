@@ -18,7 +18,6 @@ class Signup extends StatefulWidget {
 class _SignupState extends State<Signup> {
   final Color coffeeBrown = const Color(0xFF6F4E37);
 
-  final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -26,21 +25,14 @@ class _SignupState extends State<Signup> {
 
   @override
   void dispose() {
-    nameController.dispose();
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
   }
 
   void _signUp() {
-    final name = nameController.text.trim();
     final email = emailController.text.trim();
     final password = passwordController.text;
-
-    if (name.isEmpty) {
-      _showMessage('Please enter your name.');
-      return;
-    }
 
     if (email.isEmpty) {
       _showMessage('Please enter your email.');
@@ -53,7 +45,7 @@ class _SignupState extends State<Signup> {
     }
 
     context.read<AuthBloc>().add(
-      SignUpEvent(name: name, email: email, password: password),
+      SignUpEvent(email: email, password: password),
     );
   }
 
@@ -118,27 +110,6 @@ class _SignupState extends State<Signup> {
                     ),
 
                     const SizedBox(height: 20),
-
-                    // NAME
-                    TextField(
-                      controller: nameController,
-                      textInputAction: TextInputAction.next,
-                      decoration: InputDecoration(
-                        hintText: 'Full Name',
-                        prefixIcon: Icon(
-                          Icons.person_outline,
-                          color: coffeeBrown,
-                        ),
-                        filled: true,
-                        fillColor: const Color(0xFFF7EDE0),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 15),
 
                     // EMAIL
                     TextField(

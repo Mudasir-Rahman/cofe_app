@@ -2,7 +2,6 @@ import 'package:cofe_app/features/auth/data/model/auth_model.dart';
 
 abstract class AuthRemoteDataSource {
   Future<UserModel> signUp({
-    required String name,
     required String email,
     required String password,
   });

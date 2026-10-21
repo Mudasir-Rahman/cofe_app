@@ -11,7 +11,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<UserModel> signUp({
-    required String name,
     required String email,
     required String password,
   }) async {
@@ -19,7 +18,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       final response = await supabase.auth.signUp(
         email: email,
         password: password,
-        data: {'name': name},
       );
 
       final user = response.user;

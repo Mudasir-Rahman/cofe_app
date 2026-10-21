@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BrewCraft - Premium Coffee App</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            coffee: {
+              50: '#FDF8F5',
+              100: '#F7EBE1',
+              200: '#EBD2C1',
+              300: '#D9B299',
+              400: '#C28E6E',
+              500: '#A66E4E',
+              600: '#8A5236',
+              700: '#6E3C25',
+              800: '#522A18',
+              900: '#361A0E',
+              950: '#221008',
+            },
+            amberAccent: '#C67C4E',
+            bgWarm: '#0D0D0D',
+            cardBg: '#1C1C1E',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom scrollbar styles */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    
+    /* Smooth transitions */
+    .smooth-transition {
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Glassmorphism background */
+    .glass-nav {
+      background: rgba(18, 18, 20, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .glass-card {
+      background: rgba(30, 30, 32, 0.7);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+  </style>
+</head>
+<body class="bg-[#0C0C0E] text-slate-100 font-sans min-h-screen flex justify-center items-center p-0 sm:p-4 md:p-6 select-none overflow-x-hidden">
+
+  <!-- Main Mobile / App Container -->
+  <div class="w-full max-w-md sm:max-w-lg md:max-w-xl h-screen sm:h-[912px] bg-[#121214] sm:rounded-[40px] shadow-2xl shadow-black/80 flex flex-col relative overflow-hidden border border-white/10">
+
+    <!-- TOP HEADER -->
+    <header class="pt-6 px-6 pb-2 flex items-center justify-between z-10 shrink-0">
+      <div onclick="openProfileModal()" class="flex items-center gap-3 cursor-pointer group p-1 -ml-1 rounded-2xl hover:bg-white/5 transition-all">
+        <div class="relative">
+          <img id="userAvatarHeader" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" alt="User Avatar" class="w-11 h-11 rounded-full object-cover ring-2 ring-amberAccent/50 group-hover:ring-amberAccent transition-all">
+          <span class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 rounded-full border-2 border-[#121214]"></span>
+        </div>
+        <div>
+          <p class="text-xs text-zinc-400 font-medium" id="greetingLabel">Good morning ☕</p>
+          <h2 class="text-base font-bold text-white tracking-wide flex items-center gap-1.5" id="userNameHeader">
+            <span>Alex Morgan</span>
+            <i data-lucide="edit-3" class="w-3.5 h-3.5 text-zinc-500 group-hover:text-amberAccent transition-colors"></i>
+          </h2>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button onclick="toggleNotificationModal()" class="relative p-2.5 rounded-2xl bg-zinc-800/80 hover:bg-zinc-700/80 border border-white/5 text-zinc-300 hover:text-white transition-all active:scale-95">
+          <i data-lucide="bell" class="w-5 h-5"></i>
+          <span class="absolute top-2 right-2 w-2 h-2 bg-amberAccent rounded-full animate-pulse"></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- MAIN SCROLLABLE CONTENT -->
+    <main class="flex-1 overflow-y-auto px-6 pt-3 pb-24 no-scrollbar space-y-6">
+
+      <!-- SEARCH BAR & FILTER BUTTON -->
+      <div class="flex items-center gap-3">
+        <div class="relative flex-1">
+          <i data-lucide="search" class="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400"></i>
+          <input 
+            type="text" 
+            id="searchInput" 
+            oninput="handleSearch()"
+            placeholder="Search your favorite coffee..." 
+            class="w-full bg-zinc-900/90 border border-white/10 rounded-2xl py-3.5 pl-11 pr-10 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-amberAccent/60 transition-all shadow-inner"
+          />
+          <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white">
+            <i data-lucide="x-circle" class="w-4 h-4"></i>
+          </button>
+        </div>
+        <button onclick="openFilterModal()" class="p-3.5 rounded-2xl bg-amberAccent hover:bg-amber-600 text-white shadow-lg shadow-amberAccent/20 transition-all active:scale-95 flex items-center justify-center">
+          <i data-lucide="sliders-horizontal" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- PROMO CAROUSEL BANNER -->
+      <div class="relative w-full rounded-3xl overflow-hidden shadow-xl group cursor-pointer bg-gradient-to-r from-zinc-900 to-zinc-800 border border-white/10">
+        <div id="promoSlider" class="flex transition-transform duration-500 ease-out">
+          
+          <!-- Slide 1 -->
+          <div class="min-w-full relative h-40 sm:h-44 flex items-center p-6 bg-gradient-to-r from-stone-900 via-stone-900/90 to-transparent">
+            <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&q=80&w=800" class="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-40 group-hover:scale-105 transition-transform duration-700" alt="Promo 1">
+            <div class="relative z-10 max-w-[65%] space-y-2">
+              <span class="bg-amberAccent/90 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">Promo of the Day</span>
+              <h3 class="text-xl font-extrabold text-white leading-tight">Buy 1 Get 1 Free <br><span class="text-amberAccent">Autumn Brew</span></h3>
+              <p class="text-xs text-zinc-300">Valid until today 9:00 PM</p>
+            </div>
+          </div>
+
+          <!-- Slide 2 -->
+          <div class="min-w-full relative h-40 sm:h-44 flex items-center p-6 bg-gradient-to-r from-amber-950 via-stone-900/90 to-transparent">
+            <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=800" class="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-40 group-hover:scale-105 transition-transform duration-700" alt="Promo 2">
+            <div class="relative z-10 max-w-[65%] space-y-2">
+              <span class="bg-amber-600/90 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">New Arrival</span>
+              <h3 class="text-xl font-extrabold text-white leading-tight">20% OFF on <br><span class="text-amber-400">Cold Brew Vanilla</span></h3>
+              <p class="text-xs text-zinc-300">Use Code: COFFEE20</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Carousel Indicators -->
+        <div class="absolute bottom-3 left-6 flex gap-1.5 z-20">
+          <button onclick="goToSlide(0)" id="dot-0" class="w-6 h-1.5 rounded-full bg-amberAccent transition-all"></button>
+          <button onclick="goToSlide(1)" id="dot-1" class="w-1.5 h-1.5 rounded-full bg-white/40 transition-all"></button>
+        </div>
+      </div>
+
+      <!-- CATEGORIES HORIZONTAL SCROLL -->
+      <div class="space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="text-base font-bold text-white tracking-wide">Categories</h3>
+          <span id="itemCountBadge" class="text-xs text-zinc-400 font-medium">6 Items</span>
+        </div>
+        
+        <div class="flex items-center gap-2.5 overflow-x-auto no-scrollbar py-1" id="categoryContainer">
+          <!-- Category buttons rendered dynamically via JS -->
+        </div>
+      </div>
+
+      <!-- PRODUCT GRID -->
+      <div>
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-base font-bold text-white tracking-wide" id="sectionTitle">Popular Coffee</h3>
+          <button onclick="resetFilters()" class="text-xs text-amberAccent hover:underline font-medium hidden" id="resetBtn">Reset Filters</button>
+        </div>
+
+        <div id="productGrid" class="grid grid-cols-2 gap-3.5 sm:gap-4">
+          <!-- Products dynamic injection -->
+        </div>
+
+        <!-- Empty Search State -->
+        <div id="emptyState" class="hidden flex-col items-center justify-center py-12 text-center">
+          <div class="w-16 h-16 rounded-full bg-zinc-800/80 flex items-center justify-center text-zinc-500 mb-3">
+            <i data-lucide="search-x" class="w-8 h-8"></i>
+          </div>
+          <h4 class="text-base font-semibold text-white">No Coffee Found</h4>
+          <p class="text-xs text-zinc-400 max-w-[200px] mt-1">Try searching for something else or change your category filter.</p>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- BOTTOM NAVIGATION BAR -->
+    <nav class="absolute bottom-0 inset-x-0 glass-nav border-t border-white/10 px-6 py-3.5 flex items-center justify-between z-20">
+      
+      <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center gap-1 text-amberAccent transition-colors">
+        <i data-lucide="home" class="w-5 h-5"></i>
+        <span class="text-[10px] font-semibold">Home</span>
+      </button>
+
+      <button onclick="switchTab('favorites')" id="nav-favorites" class="flex flex-col items-center gap-1 text-zinc-400 hover:text-white transition-colors">
+        <i data-lucide="heart" class="w-5 h-5"></i>
+        <span class="text-[10px] font-semibold">Favorites</span>
+      </button>
+
+      <button onclick="openCartModal()" id="nav-cart" class="relative flex flex-col items-center gap-1 text-zinc-400 hover:text-white transition-colors">
+        <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+        <span class="text-[10px] font-semibold">Cart</span>
+        <span id="cartBadge" class="hidden absolute -top-1.5 -right-2 bg-amberAccent text-white text-[10px] font-extrabold w-4 h-4 rounded-full items-center justify-center border-2 border-[#121214]">0</span>
+      </button>
+
+      <button onclick="openProfileModal()" id="nav-profile" class="flex flex-col items-center gap-1 text-zinc-400 hover:text-white transition-colors">
+        <i data-lucide="user" class="w-5 h-5"></i>
+        <span class="text-[10px] font-semibold">Profile</span>
+      </button>
+
+    </nav>
+
+    <!-- PROFILE SETUP & EDITING MODAL -->
+    <div id="profileModal" class="absolute inset-0 bg-black/80 backdrop-blur-md z-40 opacity-0 pointer-events-none transition-opacity duration-300 flex flex-col justify-end">
+      <div id="profileSheet" class="bg-[#18181B] border-t border-white/10 rounded-t-[36px] p-6 max-h-[92%] flex flex-col transform translate-y-full transition-transform duration-300 ease-out overflow-hidden">
+        
+        <!-- Profile Header -->
+        <div class="flex items-center justify-between pb-4 border-b border-white/10 shrink-0">
+          <div class="flex items-center gap-2.5">
+            <div class="p-2 bg-amberAccent/10 rounded-xl text-amberAccent">
+              <i data-lucide="user-cog" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="text-base font-bold text-white">Profile Setup</h3>
+              <p class="text-[11px] text-zinc-400">Customize your info & coffee tastes</p>
+            </div>
+          </div>
+          <button onclick="closeProfileModal()" class="p-2 rounded-full bg-zinc-800/80 text-zinc-400 hover:text-white">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <!-- Scrollable Form Content -->
+        <div class="flex-1 overflow-y-auto no-scrollbar py-4 space-y-5">
+          
+          <!-- Avatar Preview & Preset Selection -->
+          <div class="flex flex-col items-center space-y-3 bg-zinc-900/60 p-4 rounded-2xl border border-white/5">
+            <div class="relative">
+              <img id="profilePreviewImage" src="" alt="Profile Preview" class="w-20 h-20 rounded-full object-cover ring-4 ring-amberAccent/40 shadow-xl">
+              <span class="absolute bottom-0 right-0 bg-amberAccent p-1.5 rounded-full text-white shadow">
+                <i data-lucide="camera" class="w-3.5 h-3.5"></i>
+              </span>
+            </div>
+
+            <!-- Avatar Presets -->
+            <div class="w-full space-y-2">
+              <label class="text-[11px] font-semibold text-zinc-400 uppercase tracking-wider block text-center">Choose Preset Avatar</label>
+              <div class="flex items-center justify-center gap-2.5" id="avatarPresetsContainer">
+                <!-- Preset Buttons injected via JS -->
+              </div>
+            </div>
+
+            <!-- Custom URL Input -->
+            <div class="w-full pt-1">
+              <label class="text-[11px] font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Or Custom Image URL</label>
+              <div class="relative">
+                <i data-lucide="link" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500"></i>
+                <input 
+                  type="text" 
+                  id="profileCustomUrlInput" 
+                  oninput="handleCustomAvatarUrl(this.value)"
+                  placeholder="https://images.unsplash.com/..." 
+                  class="w-full bg-zinc-900 border border-white/10 rounded-xl py-2 pl-9 pr-3 text-xs text-white placeholder-zinc-600 focus:outline-none focus:border-amberAccent"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- User Personal Info Section -->
+          <div class="space-y-3">
+            <h4 class="text-xs font-bold text-amberAccent uppercase tracking-wider flex items-center gap-1.5">
+              <i data-lucide="user" class="w-3.5 h-3.5"></i> Personal Details
+            </h4>
+            
+            <div class="grid grid-cols-1 gap-3">
+              <div>
+                <label class="text-[11px] text-zinc-400 font-medium block mb-1">Full Name</label>
+                <input type="text" id="profNameInput" class="w-full bg-zinc-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amberAccent">
+              </div>
+
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label class="text-[11px] text-zinc-400 font-medium block mb-1">Email Address</label>
+                  <input type="email" id="profEmailInput" class="w-full bg-zinc-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amberAccent">
+                </div>
+                <div>
+                  <label class="text-[11px] text-zinc-400 font-medium block mb-1">Phone Number</label>
+                  <input type="tel" id="profPhoneInput" class="w-full bg-zinc-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amberAccent">
+                </div>
+              </div>
+
+              <div>
+                <label class="text-[11px] text-zinc-400 font-medium block mb-1">Delivery Address</label>
+                <input type="text" id="profAddressInput" class="w-full bg-zinc-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amberAccent">
+              </div>
+            </div>
+          </div>
+
+          <!-- Coffee Preferences Section -->
+          <div class="space-y-3 pt-2 border-t border-white/5">
+            <h4 class="text-xs font-bold text-amberAccent uppercase tracking-wider flex items-center gap-1.5">
+              <i data-lucide="coffee" class="w-3.5 h-3.5"></i> Coffee Preferences
+            </h4>
+
+            <div class="grid grid-cols-3 gap-2">
+              <div>
+                <label class="text-[10px] text-zinc-400 font-medium block mb-1">Favorite Roast</label>
+                <select id="profRoastSelect" class="w-full bg-zinc-900 border border-white/10 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-amberAccent">
+                  <option value="Light">Light Roast</option>
+                  <option value="Medium">Medium Roast</option>
+                  <option value="Dark">Dark Roast</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="text-[10px] text-zinc-400 font-medium block mb-1">Milk Option</label>
+                <select id="profMilkSelect" class="w-full bg-zinc-900 border border-white/10 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-amberAccent">
+                  <option value="Whole">Whole Milk</option>
+                  <option value="Oat">Oat Milk</option>
+                  <option value="Almond">Almond Milk</option>
+                  <option value="Skim">Skim Milk</option>
+                  <option value="None">None (Black)</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="text-[10px] text-zinc-400 font-medium block mb-1">Sugar Level</label>
+                <select id="profSugarSelect" class="w-full bg-zinc-900 border border-white/10 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-amberAccent">
+                  <option value="No Sugar">No Sugar</option>
+                  <option value="Low (25%)">Low (25%)</option>
+                  <option value="Medium (50%)">Medium (50%)</option>
+                  <option value="Standard (100%)">Standard</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Profile Modal Action Buttons -->
+        <div class="pt-3 border-t border-white/10 flex items-center gap-3 shrink-0">
+          <button onclick="closeProfileModal()" class="flex-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-semibold py-3 rounded-2xl text-xs transition-all">
+            Cancel
+          </button>
+          <button onclick="saveProfileChanges()" class="flex-1 bg-amberAccent hover:bg-amber-600 text-white font-bold py-3 rounded-2xl text-xs shadow-lg shadow-amberAccent/20 transition-all active:scale-[0.98] flex items-center justify-center gap-1.5">
+            <i data-lucide="check" class="w-4 h-4"></i> Save Profile
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- CART MODAL / DRAWER -->
+    <div id="cartModal" class="absolute inset-0 bg-black/70 backdrop-blur-sm z-30 opacity-0 pointer-events-none transition-opacity duration-300 flex flex-col justify-end">
+      <div id="cartSheet" class="bg-[#18181B] border-t border-white/10 rounded-t-[32px] p-6 max-h-[85%] flex flex-col transform translate-y-full transition-transform duration-300 ease-out">
+        
+        <div class="flex items-center justify-between pb-4 border-b border-white/10">
+          <div class="flex items-center gap-2">
+            <i data-lucide="shopping-bag" class="w-5 h-5 text-amberAccent"></i>
+            <h3 class="text-lg font-bold text-white">Your Order</h3>
+          </div>
+          <button onclick="closeCartModal()" class="p-1.5 rounded-full bg-zinc-800 text-zinc-400 hover:text-white">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <!-- CART ITEMS LIST -->
+        <div id="cartItemsList" class="flex-1 overflow-y-auto no-scrollbar py-4 space-y-3 min-h-[160px] max-h-[320px]">
+          <!-- Cart items injected dynamically -->
+        </div>
+
+        <!-- CART SUMMARY & CHECKOUT -->
+        <div id="cartFooter" class="pt-4 border-t border-white/10 space-y-4">
+          <div class="space-y-1.5 text-xs">
+            <div class="flex justify-between text-zinc-400">
+              <span>Subtotal</span>
+              <span id="subtotalPrice" class="text-white font-medium">$0.00</span>
+            </div>
+            <div class="flex justify-between text-zinc-400">
+              <span>Delivery Fee</span>
+              <span class="text-white font-medium" id="deliveryFee">$1.50</span>
+            </div>
+            <div class="flex justify-between text-sm font-bold text-white pt-2 border-t border-white/5">
+              <span>Total Amount</span>
+              <span id="totalPrice" class="text-amberAccent text-base">$0.00</span>
+            </div>
+          </div>
+
+          <button onclick="checkout()" class="w-full bg-amberAccent hover:bg-amber-600 text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-amberAccent/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+            <span>Checkout Now</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- NOTIFICATION MODAL -->
+    <div id="notificationModal" class="absolute inset-0 bg-black/70 backdrop-blur-sm z-30 opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-6">
+      <div class="bg-[#18181B] border border-white/10 rounded-3xl p-5 w-full max-w-xs space-y-4 shadow-2xl">
+        <div class="flex items-center justify-between border-b border-white/10 pb-3">
+          <h3 class="text-base font-bold text-white flex items-center gap-2">
+            <i data-lucide="bell" class="w-4 h-4 text-amberAccent"></i> Notifications
+          </h3>
+          <button onclick="toggleNotificationModal()" class="text-zinc-400 hover:text-white">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+        <div class="space-y-3">
+          <div class="p-3 bg-zinc-900/80 rounded-xl border border-white/5 text-xs space-y-1">
+            <p class="font-semibold text-white">🎉 Special Autumn Offer!</p>
+            <p class="text-zinc-400">Get Buy 1 Get 1 Free on all Autumn Brews today.</p>
+          </div>
+          <div class="p-3 bg-zinc-900/80 rounded-xl border border-white/5 text-xs space-y-1">
+            <p class="font-semibold text-white">🛵 Free Delivery</p>
+            <p class="text-zinc-400">Order over $15 and get free delivery applied automatically.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FILTER MODAL -->
+    <div id="filterModal" class="absolute inset-0 bg-black/70 backdrop-blur-sm z-30 opacity-0 pointer-events-none transition-opacity duration-300 flex items-end">
+      <div class="bg-[#18181B] border-t border-white/10 rounded-t-[32px] p-6 w-full space-y-5">
+        <div class="flex items-center justify-between pb-2 border-b border-white/10">
+          <h3 class="text-base font-bold text-white">Filter Coffee</h3>
+          <button onclick="closeFilterModal()" class="p-1 rounded-full text-zinc-400 hover:text-white">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <!-- Sort By -->
+        <div>
+          <label class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-2">Sort By</label>
+          <div class="grid grid-cols-2 gap-2">
+            <button onclick="setSortOption('rating')" id="sort-rating" class="filter-sort-btn py-2.5 text-xs rounded-xl border border-white/10 bg-zinc-900 text-zinc-300 hover:border-amberAccent/50 font-medium transition-all">Highest Rated</button>
+            <button onclick="setSortOption('price-asc')" id="sort-price-asc" class="filter-sort-btn py-2.5 text-xs rounded-xl border border-white/10 bg-zinc-900 text-zinc-300 hover:border-amberAccent/50 font-medium transition-all">Price: Low to High</button>
+          </div>
+        </div>
+
+        <button onclick="applyFilters()" class="w-full bg-amberAccent text-white font-bold py-3.5 rounded-2xl shadow-lg transition-all active:scale-[0.98]">
+          Apply Filters
+        </button>
+      </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="absolute top-20 left-1/2 -translate-x-1/2 bg-amberAccent text-white text-xs font-semibold px-4 py-2.5 rounded-full shadow-lg z-50 transition-all duration-300 opacity-0 pointer-events-none translate-y-[-10px] flex items-center gap-2">
+      <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+      <span id="toastMsg">Added to cart!</span>
+    </div>
+
+  </div>
+
+  <script>
+    // --- PRODUCT DATA ---
+    const productsData = [
+      {
+        id: '1',
+        name: 'Cappuccino Supreme',
+        subtitle: 'With Oat Milk & Cinnamon',
+        category: 'Cappuccino',
+        price: 4.50,
+        rating: 4.8,
+        image: 'https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&q=80&w=600',
+        isFavorite: false
+      },
+      {
+        id: '2',
+        name: 'Caffè Espresso',
+        subtitle: 'Rich & Double Shot',
+        category: 'Espresso',
+        price: 3.20,
+        rating: 4.9,
+        image: 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&q=80&w=600',
+        isFavorite: true
+      },
+      {
+        id: '3',
+        name: 'Caramel Macchiato',
+        subtitle: 'Vanilla Syrup & Caramel',
+        category: 'Macchiato',
+        price: 5.10,
+        rating: 4.7,
+        image: 'https://images.unsplash.com/photo-1485808191679-5f86510681a2?auto=format&fit=crop&q=80&w=600',
+        isFavorite: false
+      },
+      {
+        id: '4',
+        name: 'Iced Vanilla Latte',
+        subtitle: 'Espresso & Ice Milk',
+        category: 'Latte',
+        price: 4.80,
+        rating: 4.6,
+        image: 'https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&q=80&w=600',
+        isFavorite: false
+      },
+      {
+        id: '5',
+        name: 'Cold Brew Nitro',
+        subtitle: 'Smooth & Naturally Sweet',
+        category: 'Cold Brew',
+        price: 4.90,
+        rating: 4.9,
+        image: 'https://images.unsplash.com/photo-1517701534127-d441113b2e55?auto=format&fit=crop&q=80&w=600',
+        isFavorite: false
+      },
+      {
+        id: '6',
+        name: 'Classic Americano',
+        subtitle: 'Hot Water & Espresso',
+        category: 'Americano',
+        price: 3.50,
+        rating: 4.5,
+        image: 'https://images.unsplash.com/photo-1551033406-611cf9a28f67?auto=format&fit=crop&q=80&w=600',
+        isFavorite: false
+      }
+    ];
+
+    const categories = ['All', 'Cappuccino', 'Espresso', 'Latte', 'Americano', 'Cold Brew', 'Macchiato'];
+
+    const avatarPresets = [
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150',
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150',
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150',
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=150'
+    ];
+
+    // --- APP STATE ---
+    let state = {
+      selectedCategory: 'All',
+      searchQuery: '',
+      cart: [],
+      favorites: ['2'],
+      activeTab: 'home',
+      currentSlide: 0,
+      sortBy: null,
+      userProfile: {
+        name: 'Alex Morgan',
+        email: 'alex.morgan@brewcraft.com',
+        phone: '+1 (555) 234-5678',
+        address: '742 Evergreen Terrace, Seattle, WA',
+        avatarUrl: avatarPresets[0],
+        preferences: {
+          roast: 'Medium',
+          milk: 'Oat',
+          sugar: 'Low (25%)'
+        }
+      }
+    };
+
+    // --- INITIALIZATION ---
+    window.onload = () => {
+      lucide.createIcons();
+      renderCategories();
+      renderProducts();
+      updateCartBadge();
+      startPromoSlider();
+      syncUserProfileUI();
+      renderAvatarPresets();
+    };
+
+    // --- USER PROFILE SYSTEM ---
+    function syncUserProfileUI() {
+      // Header Updates
+      document.getElementById('userNameHeader').querySelector('span').textContent = state.userProfile.name;
+      document.getElementById('userAvatarHeader').src = state.userProfile.avatarUrl;
+
+      // Profile Modal Input Sync
+      document.getElementById('profNameInput').value = state.userProfile.name;
+      document.getElementById('profEmailInput').value = state.userProfile.email;
+      document.getElementById('profPhoneInput').value = state.userProfile.phone;
+      document.getElementById('profAddressInput').value = state.userProfile.address;
+      document.getElementById('profilePreviewImage').src = state.userProfile.avatarUrl;
+      document.getElementById('profRoastSelect').value = state.userProfile.preferences.roast;
+      document.getElementById('profMilkSelect').value = state.userProfile.preferences.milk;
+      document.getElementById('profSugarSelect').value = state.userProfile.preferences.sugar;
+    }
+
+    function renderAvatarPresets() {
+      const container = document.getElementById('avatarPresetsContainer');
+      container.innerHTML = avatarPresets.map((url, idx) => `
+        <button 
+          onclick="selectPresetAvatar('${url}')"
+          class="w-10 h-10 rounded-full overflow-hidden border-2 transition-all hover:scale-110 ${
+            state.userProfile.avatarUrl === url ? 'border-amberAccent ring-2 ring-amberAccent/40' : 'border-white/10 opacity-70 hover:opacity-100'
+          }">
+          <img src="${url}" class="w-full h-full object-cover" alt="Preset ${idx+1}">
+        </button>
+      `).join('');
+    }
+
+    function selectPresetAvatar(url) {
+      document.getElementById('profilePreviewImage').src = url;
+      document.getElementById('profileCustomUrlInput').value = '';
+      state.userProfile.avatarUrl = url;
+      renderAvatarPresets();
+    }
+
+    function handleCustomAvatarUrl(url) {
+      if (url.trim().length > 5) {
+        document.getElementById('profilePreviewImage').src = url;
+        state.userProfile.avatarUrl = url;
+        renderAvatarPresets();
+      }
+    }
+
+    function openProfileModal() {
+      syncUserProfileUI();
+      const modal = document.getElementById('profileModal');
+      const sheet = document.getElementById('profileSheet');
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      sheet.classList.remove('translate-y-full');
+      
+      // Highlight profile nav button
+      document.getElementById('nav-profile').className = "flex flex-col items-center gap-1 text-amberAccent transition-colors";
+    }
+
+    function closeProfileModal() {
+      const modal = document.getElementById('profileModal');
+      const sheet = document.getElementById('profileSheet');
+      sheet.classList.add('translate-y-full');
+      setTimeout(() => {
+        modal.classList.add('opacity-0', 'pointer-events-none');
+      }, 200);
+
+      if (state.activeTab !== 'profile') {
+        document.getElementById('nav-profile').className = "flex flex-col items-center gap-1 text-zinc-400 hover:text-white transition-colors";
+      }
+    }
+
+    function saveProfileChanges() {
+      const name = document.getElementById('profNameInput').value.trim();
+      const email = document.getElementById('profEmailInput').value.trim();
+      const phone = document.getElementById('profPhoneInput').value.trim();
+      const address = document.getElementById('profAddressInput').value.trim();
+
+      if (!name) {
+        showToast("Please enter a valid name");
+        return;
+      }
+
+      state.userProfile.name = name;
+      state.userProfile.email = email;
+      state.userProfile.phone = phone;
+      state.userProfile.address = address;
+      state.userProfile.preferences.roast = document.getElementById('profRoastSelect').value;
+      state.userProfile.preferences.milk = document.getElementById('profMilkSelect').value;
+      state.userProfile.preferences.sugar = document.getElementById('profSugarSelect').value;
+
+      syncUserProfileUI();
+      closeProfileModal();
+      showToast("Profile updated successfully! ✨");
+    }
+
+    // --- PROMO BANNER CAROUSEL ---
+    function startPromoSlider() {
+      setInterval(() => {
+        state.currentSlide = (state.currentSlide === 0) ? 1 : 0;
+        goToSlide(state.currentSlide);
+      }, 5000);
+    }
+
+    function goToSlide(index) {
+      state.currentSlide = index;
+      const slider = document.getElementById('promoSlider');
+      slider.style.transform = `translateX(-${index * 100}%)`;
+      
+      document.getElementById('dot-0').className = index === 0 ? "w-6 h-1.5 rounded-full bg-amberAccent transition-all" : "w-1.5 h-1.5 rounded-full bg-white/40 transition-all";
+      document.getElementById('dot-1').className = index === 1 ? "w-6 h-1.5 rounded-full bg-amberAccent transition-all" : "w-1.5 h-1.5 rounded-full bg-white/40 transition-all";
+    }
+
+    // --- CATEGORY SWITCHING ---
+    function renderCategories() {
+      const container = document.getElementById('categoryContainer');
+      container.innerHTML = categories.map(cat => {
+        const isActive = state.selectedCategory === cat;
+        return `
+          <button 
+            onclick="selectCategory('${cat}')"
+            class="px-4 py-2.5 rounded-2xl text-xs font-semibold whitespace-nowrap transition-all duration-200 ${
+              isActive 
+                ? 'bg-amberAccent text-white shadow-lg shadow-amberAccent/30 scale-105' 
+                : 'bg-zinc-900/80 text-zinc-400 hover:text-white hover:bg-zinc-800 border border-white/5'
+            }">
+            ${cat}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function selectCategory(category) {
+      state.selectedCategory = category;
+      renderCategories();
+      renderProducts();
+    }
+
+    // --- SEARCH FUNCTIONALITY ---
+    function handleSearch() {
+      const input = document.getElementById('searchInput');
+      const clearBtn = document.getElementById('clearSearchBtn');
+      state.searchQuery = input.value.trim().toLowerCase();
+
+      if (state.searchQuery.length > 0) {
+        clearBtn.classList.remove('hidden');
+      } else {
+        clearBtn.classList.add('hidden');
+      }
+
+      renderProducts();
+    }
+
+    function clearSearch() {
+      const input = document.getElementById('searchInput');
+      input.value = '';
+      state.searchQuery = '';
+      document.getElementById('clearSearchBtn').classList.add('hidden');
+      renderProducts();
+    }
+
+    // --- RENDER PRODUCTS ---
+    function renderProducts() {
+      const grid = document.getElementById('productGrid');
+      const emptyState = document.getElementById('emptyState');
+      const countBadge = document.getElementById('itemCountBadge');
+
+      let filtered = productsData.filter(p => {
+        const matchesCategory = state.selectedCategory === 'All' || p.category === state.selectedCategory;
+        const matchesSearch = p.name.toLowerCase().includes(state.searchQuery) || p.subtitle.toLowerCase().includes(state.searchQuery);
+        const matchesTab = state.activeTab === 'favorites' ? state.favorites.includes(p.id) : true;
+        return matchesCategory && matchesSearch && matchesTab;
+      });
+
+      if (state.sortBy === 'rating') {
+        filtered.sort((a, b) => b.rating - a.rating);
+      } else if (state.sortBy === 'price-asc') {
+        filtered.sort((a, b) => a.price - b.price);
+      }
+
+      countBadge.textContent = `${filtered.length} Items`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        emptyState.classList.add('flex');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      emptyState.classList.remove('flex');
+
+      grid.innerHTML = filtered.map(p => {
+        const isFav = state.favorites.includes(p.id);
+        return `
+          <div class="glass-card rounded-3xl p-3.5 flex flex-col justify-between group hover:border-amberAccent/40 transition-all duration-300 hover:-translate-y-1">
+            
+            <div class="relative w-full h-36 rounded-2xl overflow-hidden mb-3">
+              <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+              
+              <div class="absolute top-2.5 left-2.5 bg-black/60 backdrop-blur-md px-2 py-0.5 rounded-full flex items-center gap-1 text-[11px] font-bold text-white">
+                <i data-lucide="star" class="w-3 h-3 text-amber-400 fill-amber-400"></i>
+                <span>${p.rating}</span>
+              </div>
+
+              <button 
+                onclick="toggleFavorite('${p.id}')" 
+                class="absolute top-2.5 right-2.5 p-2 rounded-full bg-black/40 backdrop-blur-md text-white hover:scale-110 active:scale-95 transition-all">
+                <i data-lucide="heart" class="w-4 h-4 ${isFav ? 'text-red-500 fill-red-500' : 'text-white'}"></i>
+              </button>
+            </div>
+
+            <div class="space-y-1 flex-1 flex flex-col justify-between">
+              <div>
+                <h4 class="text-sm font-bold text-white leading-snug group-hover:text-amberAccent transition-colors">${p.name}</h4>
+                <p class="text-[11px] text-zinc-400 font-normal line-clamp-1">${p.subtitle}</p>
+              </div>
+
+              <div class="flex items-center justify-between pt-2">
+                <span class="text-base font-extrabold text-white">$${p.price.toFixed(2)}</span>
+                <button 
+                  onclick="addToCart('${p.id}')"
+                  class="p-2.5 bg-amberAccent hover:bg-amber-600 text-white rounded-xl shadow-md shadow-amberAccent/20 transition-all active:scale-90 flex items-center justify-center">
+                  <i data-lucide="plus" class="w-4 h-4 stroke-[3]"></i>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    // --- FAVORITE TOGGLE ---
+    function toggleFavorite(id) {
+      if (state.favorites.includes(id)) {
+        state.favorites = state.favorites.filter(favId => favId !== id);
+        showToast("Removed from favorites");
+      } else {
+        state.favorites.push(id);
+        showToast("Added to favorites ❤️");
+      }
+      renderProducts();
+    }
+
+    // --- CART LOGIC ---
+    function addToCart(id) {
+      const existing = state.cart.find(item => item.id === id);
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        const product = productsData.find(p => p.id === id);
+        state.cart.push({ ...product, quantity: 1 });
+      }
+
+      updateCartBadge();
+      showToast("Added to your order ☕");
+    }
+
+    function updateCartQuantity(id, delta) {
+      const item = state.cart.find(i => i.id === id);
+      if (!item) return;
+
+      item.quantity += delta;
+      if (item.quantity <= 0) {
+        state.cart = state.cart.filter(i => i.id !== id);
+      }
+
+      updateCartBadge();
+      renderCartItems();
+    }
+
+    function updateCartBadge() {
+      const badge = document.getElementById('cartBadge');
+      const totalCount = state.cart.reduce((sum, item) => sum + item.quantity, 0);
+
+      if (totalCount > 0) {
+        badge.textContent = totalCount;
+        badge.classList.remove('hidden');
+        badge.classList.add('flex');
+      } else {
+        badge.classList.add('hidden');
+        badge.classList.remove('flex');
+      }
+    }
+
+    function renderCartItems() {
+      const container = document.getElementById('cartItemsList');
+      const subtotalEl = document.getElementById('subtotalPrice');
+      const totalEl = document.getElementById('totalPrice');
+
+      if (state.cart.length === 0) {
+        container.innerHTML = `
+          <div class="flex flex-col items-center justify-center h-40 text-center text-zinc-500 space-y-2">
+            <i data-lucide="shopping-bag" class="w-8 h-8 opacity-40"></i>
+            <p class="text-xs font-medium">Your cart is currently empty</p>
+          </div>
+        `;
+        subtotalEl.textContent = "$0.00";
+        totalEl.textContent = "$0.00";
+        lucide.createIcons();
+        return;
+      }
+
+      let subtotal = 0;
+
+      container.innerHTML = state.cart.map(item => {
+        subtotal += item.price * item.quantity;
+        return `
+          <div class="flex items-center justify-between bg-zinc-900/90 border border-white/5 p-3 rounded-2xl">
+            <div class="flex items-center gap-3">
+              <img src="${item.image}" alt="${item.name}" class="w-12 h-12 rounded-xl object-cover">
+              <div>
+                <h5 class="text-xs font-bold text-white">${item.name}</h5>
+                <p class="text-[10px] text-amberAccent font-semibold">$${item.price.toFixed(2)}</p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2.5 bg-zinc-800 px-2.5 py-1.5 rounded-xl border border-white/5">
+              <button onclick="updateCartQuantity('${item.id}', -1)" class="text-zinc-400 hover:text-white text-xs font-bold px-1">-</button>
+              <span class="text-xs font-bold text-white w-4 text-center">${item.quantity}</span>
+              <button onclick="updateCartQuantity('${item.id}', 1)" class="text-amberAccent hover:text-amber-400 text-xs font-bold px-1">+</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const delivery = 1.50;
+      subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
+      totalEl.textContent = `$${(subtotal + delivery).toFixed(2)}`;
+      lucide.createIcons();
+    }
+
+    // --- MODAL CONTROLS ---
+    function openCartModal() {
+      renderCartItems();
+      const modal = document.getElementById('cartModal');
+      const sheet = document.getElementById('cartSheet');
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      sheet.classList.remove('translate-y-full');
+    }
+
+    function closeCartModal() {
+      const modal = document.getElementById('cartModal');
+      const sheet = document.getElementById('cartSheet');
+      sheet.classList.add('translate-y-full');
+      setTimeout(() => {
+        modal.classList.add('opacity-0', 'pointer-events-none');
+      }, 200);
+    }
+
+    function toggleNotificationModal() {
+      const modal = document.getElementById('notificationModal');
+      if (modal.classList.contains('opacity-0')) {
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+      } else {
+        modal.classList.add('opacity-0', 'pointer-events-none');
+      }
+    }
+
+    function openFilterModal() {
+      const modal = document.getElementById('filterModal');
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+    }
+
+    function closeFilterModal() {
+      const modal = document.getElementById('filterModal');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+    }
+
+    function setSortOption(type) {
+      state.sortBy = type;
+      document.querySelectorAll('.filter-sort-btn').forEach(btn => {
+        btn.classList.remove('border-amberAccent', 'text-amberAccent', 'bg-amberAccent/10');
+      });
+      const activeBtn = document.getElementById(`sort-${type}`);
+      if (activeBtn) {
+        activeBtn.classList.add('border-amberAccent', 'text-amberAccent', 'bg-amberAccent/10');
+      }
+    }
+
+    function applyFilters() {
+      closeFilterModal();
+      renderProducts();
+      document.getElementById('resetBtn').classList.remove('hidden');
+    }
+
+    function resetFilters() {
+      state.sortBy = null;
+      state.selectedCategory = 'All';
+      state.searchQuery = '';
+      document.getElementById('searchInput').value = '';
+      document.getElementById('resetBtn').classList.add('hidden');
+      renderCategories();
+      renderProducts();
+    }
+
+    // --- TAB SWITCHING ---
+    function switchTab(tab) {
+      state.activeTab = tab;
+      
+      const navHome = document.getElementById('nav-home');
+      const navFav = document.getElementById('nav-favorites');
+      const navProfile = document.getElementById('nav-profile');
+
+      [navHome, navFav, navProfile].forEach(el => {
+        el.className = "flex flex-col items-center gap-1 text-zinc-400 hover:text-white transition-colors";
+      });
+
+      if (tab === 'home') {
+        navHome.className = "flex flex-col items-center gap-1 text-amberAccent transition-colors";
+        document.getElementById('sectionTitle').textContent = "Popular Coffee";
+      } else if (tab === 'favorites') {
+        navFav.className = "flex flex-col items-center gap-1 text-amberAccent transition-colors";
+        document.getElementById('sectionTitle').textContent = "Your Favorites ❤️";
+      } else if (tab === 'profile') {
+        openProfileModal();
+      }
+
+      renderProducts();
+    }
+
+    // --- CHECKOUT SIMULATION ---
+    function checkout() {
+      if (state.cart.length === 0) {
+        showToast("Your cart is empty!");
+        return;
+      }
+      closeCartModal();
+      showToast("Order placed successfully! ☕✨");
+      state.cart = [];
+      updateCartBadge();
+    }
+
+    // --- TOAST NOTIFICATION UTILITY ---
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      const msg = document.getElementById('toastMsg');
+      msg.textContent = message;
+
+      toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-10px]');
+      toast.classList.add('opacity-100', 'translate-y-0');
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-10px]');
+        toast.classList.remove('opacity-100', 'translate-y-0');
+      }, 2500);
+    }
+  </script>
+</body>
+</html>

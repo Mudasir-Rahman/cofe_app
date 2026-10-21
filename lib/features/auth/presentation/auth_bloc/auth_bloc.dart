@@ -33,7 +33,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(const AuthLoading());
     final result = await singUpUseCase(
       SignUpParams(
-        name: event.name,
         email: event.email,
         password: event.password,
       ),

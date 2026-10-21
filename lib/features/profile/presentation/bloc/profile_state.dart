@@ -26,6 +26,10 @@ class ProfileLoaded extends ProfileState {
   List<Object> get props => [profile];
 }
 
+class ProfileNotFound extends ProfileState {
+  const ProfileNotFound();
+}
+
 class ProfileError extends ProfileState {
   final String message;
   const ProfileError({required this.message});
