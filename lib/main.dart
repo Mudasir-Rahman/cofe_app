@@ -1,3 +1,4 @@
+import 'package:cofe_app/features/home_presentation/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -7,7 +8,7 @@ import 'core/config/app_routes.dart';
 
 import 'features/auth/presentation/auth_bloc/auth_bloc.dart';
 import 'features/auth/presentation/auth_bloc/auth_event.dart';
-import 'features/auth/presentation/home_screen/home.dart';
+
 import 'features/auth/presentation/auth_pages/onboarding_page.dart';
 import 'features/auth/presentation/auth_pages/signIn.dart';
 import 'features/auth/presentation/auth_pages/signUp.dart';
@@ -62,7 +63,10 @@ class MyApp extends StatelessWidget {
           AppRoutes.onboarding: (context) => const OnboardingPage(),
           AppRoutes.signIn: (context) => const Signin(),
           AppRoutes.signUp: (context) => const Signup(),
-          AppRoutes.home: (context) => const HomeScreen(),
+          AppRoutes.home: (context) => BlocProvider(
+            create: (_) => di.sl<ProfileBloc>()..add(const GetProfileEvent()),
+            child: const HomePage(),
+          ),
           AppRoutes.profile: (context) => BlocProvider(
             create: (_) => di.sl<ProfileBloc>()..add(const GetProfileEvent()),
             child: const ProfilePage(),
