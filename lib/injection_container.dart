@@ -23,7 +23,7 @@ final sl = GetIt.instance;
 
 Future<void> init() async {
   // Features - Auth
-  
+
   // Bloc
   sl.registerFactory(
     () => AuthBloc(
